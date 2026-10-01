@@ -11,7 +11,7 @@
 .box {
     height: 20px;
     width: 20px;
-    background-color: white; /* 通路は白など */
+    background-color: white; /* 通路は白 */
 }
 
 .box.wall {
