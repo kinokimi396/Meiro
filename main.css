@@ -1,19 +1,29 @@
 #field {
     display: grid;
-    grid-template-columns: repeat(20, 20px);
-    grid-template-rows: repeat(20, 20px);
+    grid-template-columns: repeat(100, 5px);
+    grid-template-rows: repeat(100, 5px);
     gap: 1px;
     background-color: #ccc;
     width: max-content;
-    margin: 20px auto;
+    margin: 5px auto;
 }
 
 .box {
-    height: 20px;
-    width: 20px;
+    height: 5px;
+    width: 5px;
     background-color: white; /* 通路は白 */
 }
 
 .box.wall {
     background-color: black; /* 壁は黒 */
+}
+
+.box.start{
+    background-color: green !important; 
+}
+.box.goal{
+    background-color:red !important;
+}
+.box.player{
+    background-color: blue !important;
 }

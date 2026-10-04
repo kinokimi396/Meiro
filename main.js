@@ -1,13 +1,15 @@
 // 1. 変数の初期化
 let A = [];
 
-for(let i = 0; i < 20; i++){
+
+for(let i = 0; i < 100; i++){
     A[i] = []; 
-    for(let j = 0; j < 20; j++){
+    for(let j = 0; j < 100; j++){
         A[i][j] = 0;
     }
 }
-
+let playerRow = 0;
+let playerCol = 0;
 // 2. 迷路のアルゴリズム（関数）の定義
 function stick_make(maxRow, maxCol){
     for(let i = 0; i < maxRow; i++){
@@ -30,6 +32,7 @@ function stick_make(maxRow, maxCol){
             A[row][col] = 1; // 柱を立てる
 
             let downloaded = false; 
+            let count=0;
 
             while(!downloaded){
                 let randomIdx = Math.floor(Math.random() * directions.length);
@@ -46,28 +49,75 @@ function stick_make(maxRow, maxCol){
                         downloaded = true; 
                     }
                 }
+                count++;
+                if(count>100){
+                    break;
+                }
             }
         }
     }
 }
 
 // 3. 描画用関数の定義
-function drawMaze(){
+function drawMaze(startPosition = "random"){
     const field = document.getElementById("field");
     field.innerHTML = ""; 
 
-    for(let i = 0; i < 20; i++){
-        for(let j = 0; j < 20; j++){
+    const maxRow = 100;
+    const maxCol = 100;
+    const corners = [
+        {r:1,c:1},
+        {r:1,c:maxCol-7},
+        {r:maxRow-7,c:1},
+        {r:maxRow-7,c:maxCol-7}
+    ];
+
+    let startCoord;
+    if(startPosition === "random"){
+        const randomIndex = Math.floor(Math.random()*corners.length);
+        startCoord = corners[randomIndex];
+    } else if(startPosition === "top-left"){
+        startCoord = corners[0];
+    } else if(startPosition === "top-right"){
+        startCoord = corners[1];
+    } else if(startPosition === "bottom-left"){
+        startCoord = corners[2];
+    } else if(startPosition === "bottom-right"){
+        startCoord = corners[3];
+    }
+
+    const remainingCorners = corners.filter(c => !(c.r === startCoord.r && c.c === startCoord.c));
+    const goalCoord = remainingCorners[Math.floor(Math.random()*remainingCorners.length)];
+
+    for(let i=goalCoord.r; i<goalCoord.r+7; i++){
+        for(let j=goalCoord.c; j<goalCoord.c+7; j++){
+            A[i][j] = 0; 
+        }
+    }
+
+    playerRow = startCoord.r;
+    playerCol = startCoord.c;
+
+    for(let i = 0; i < 100; i++){
+        for(let j = 0; j < 100; j++){
             const box = document.createElement("div");
             box.classList.add("box");
             if(A[i][j] === 1){
                 box.classList.add("wall");
             }
+            if(i >= startCoord.r && i<startCoord.r + 7 && j>=startCoord.c && j<startCoord.c + 7){
+                box.classList.add("start");
+            }
+            if(i >= goalCoord.r && i < goalCoord.r + 7 && j>=goalCoord.c && j < goalCoord.c + 7){
+                box.classList.add("goal");
+            }
+            if(i === playerRow && j === playerCol){
+                box.classList.add("player");
+            }
             field.appendChild(box);
         }
     }
 }
-
 // 4. 実行
-stick_make(20, 20);
-drawMaze();
+stick_make(100, 100);
+drawMaze("random");
