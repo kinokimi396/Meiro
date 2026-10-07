@@ -11,11 +11,11 @@
 .box {
     height: 5px;
     width: 5px;
-    background-color: white; /* 通路は白 */
+    background-color: white; 
 }
 
 .box.wall {
-    background-color: black; /* 壁は黒 */
+    background-color: black; 
 }
 
 .box.start{
